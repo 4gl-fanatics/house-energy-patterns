@@ -1,0 +1,24 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            "**/*.r": true,
+            "**/.builder": true,
+            "**/.externalToolBuilders": true,
+            "**/.sonarlint": true,
+            "**/.vscode": false
+        },
+        "files.trimTrailingWhitespace": true,
+        "files.associations": {
+            "*.p": "abl",
+            "*.cls": "abl",
+            "*.w": "abl",
+            "*.i": "abl"
+        },
+        "editor.formatOnPaste": true
+    }
+}
