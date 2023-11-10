@@ -1,4 +1,3 @@
-
 /*
 This is free and unencumbered software released into the public domain.
 
@@ -26,47 +25,34 @@ OTHER DEALINGS IN THE SOFTWARE.
 For more information, please refer to <https://unlicense.org>
 */
 /*------------------------------------------------------------------------
-    File        : run-adapter.p
+    File        : factoryDemo.p
     Purpose     :
+
     Syntax      :
+
     Description :
-    Author(s)   : Peter Judge / Consultingwerk. Ltd.
-    Created     :
+
+    Author(s)   : Peter Judge / Consultingwerk
     Notes       :
   ----------------------------------------------------------------------*/
 
 block-level on error undo, throw.
 
-using Consultingwerk.Demo.Decorator.* from propath.
-using OpenEdge.Core.* from propath.
+using Consultingwerk.Demo.Decorator.*.
+using Consultingwerk.Demo.Factory.*.
 
-define variable oMyHouse as IHouse no-undo.
-define variable oAdapter as Progress.Lang.Object no-undo.
+define variable oHouse as IHouse no-undo.
+define variable oHouseBuilder as IHouseBuilder no-undo.
 
-/* Base house (the one to decorate) */
-oMyHouse = new BasicHouse().
+/* ***************************  Main Block  *************************** */
 
-/* Add Insulation */
-oMyHouse = new InsulatedHouse(oMyHouse).
+oHouseBuilder = HouseBuilder:Build("").
 
-/* And a Heat Pump */
-oMyHouse = new HeatPumpHouse(oMyHouse).
+oHouseBuilder:AddHeatPump(true).
 
-/* It's still an IHouse instance */
-oMyHouse:GetEndEnergyConsumption().  // 5000w
+oHouse = oHouseBuilder:House.
 
-message cast(oMyHouse, InsulatedHouse):RValue.	 			/* !! RUNTIME ERROR !! */
+display "Basic House Energy Consuption: " oHouse:GetEndEnergyConsumption() skip.
 
-message 'type-of IHouse? ' type-of(oMyHouse, IHouse). 			/* true */
-message 'type-of InsulatedHouse? ' type-of(oMyHouse, InsulatedHouse). 	/* false */
-message 'TypeName ' oMyHouse :GetClass():TypeName.			/* HeatPumpHouse */
-
-message 'type-of IHouse? ' type-of(oMyHouse, IHouse). 		/* type-of IHouse? true */
-message 'TypeName ' oMyHouse :GetClass():TypeName.			/* TypeName HeatPumpHouse */
-
-if type-of(oMyHouse, IAdaptable) then do:
-  oAdapter = cast(oMyHouse, IAdaptable):GetAdapter(get-class(InsulatedHouse)).
-
-  if valid-object(oAdapter) then
-    message cast(oAdapter, InsulatedHouse):RValue. 			/* works! */
-end.
+oHouse = HouseBuilder:Build("modern"):House. //you don't see who build the object for you
+display "Modern House Energy Consuption: " oHouse:GetEndEnergyConsumption().

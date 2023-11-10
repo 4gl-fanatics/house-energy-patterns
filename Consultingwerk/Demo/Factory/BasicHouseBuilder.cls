@@ -25,42 +25,27 @@ OTHER DEALINGS IN THE SOFTWARE.
 For more information, please refer to <https://unlicense.org>
 */
 /*------------------------------------------------------------------------
-    File        : run.p
+    File        : BasicHouseBuilder
     Purpose     :
     Syntax      :
     Description :
-    Author(s)   : Peter Judge / Consultingwerk. Ltd.
-    Created     :
+    Author(s)   : Peter Judge / Consultingwerk Ltd
     Notes       :
   ----------------------------------------------------------------------*/
 
 block-level on error undo, throw.
 
-using Example.Entertainment.* from propath.
+using Consultingwerk.Demo.Factory.*.
+using Consultingwerk.Demo.Decorator.*.
 
-define variable oSeat as ISeat no-undo.
+class Consultingwerk.Demo.Factory.BasicHouseBuilder inherits HouseBuilder:
 
-/* Base seat (the one to decorate) */
-oSeat = new Seat(true).
+    method protected override IHouse GetInstance():
+         define variable oHouse as IHouse no-undo.
 
-oSeat = new SeatControls("C150", oSeat).
+         oHouse = new BasicHouse().
 
-/* Seat with screen : predefined screen */
-oSeat = new Hd12801024TouchScreen(oSeat).
+         return oHouse.
+     end method.
 
-/* or build individual
-*/
-oSeat = new SeatScreen(800, 600, ResolutionEnum:StandardDefinition, false, false, oSeat).
-
-oSeat:PlayChannel(ChannelTypeEnum:Radio, "WERS").
-
-message 'TypeName ' oSeat:GetCLass():TypeName.
-message 'type-of ISeat? ' type-of(oSeat, ISeat).
-message 'type-of ISeatScreen? ' type-of(oSeat, ISeatScreen).
-
-if type-of(oSeat, ISeatScreen) then do:
-    message 'Screen details: ' substitute('&1x&2@&3', cast(oSeat, ISeatScreen):Height, cast(oSeat, ISeatScreen):Width, string(cast(oSeat, ISeatScreen):Resolution)).
-
-    //cast(oSeat, ISeatScreen):PlayPipChannel(ChannelTypeEnum:Radio, "WBUR").
-    cast(oSeat, ISeatScreen):PlayPipChannel(ChannelTypeEnum:Tv, "BBC1").
-end.
+end class.

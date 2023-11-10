@@ -42,7 +42,7 @@ using Consultingwerk.Demo.Decorator.*.
 class Consultingwerk.Demo.Decorator.InsulatedHouse
     inherits HouseDecorator:
 
-    define public property RValue as integer no-undo
+    define public property RValue as decimal no-undo
     get.
     protected set.
 
